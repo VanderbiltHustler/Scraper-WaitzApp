@@ -37,22 +37,101 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = require("axios");
-function scrapeWaitz() {
+// Object to Store the data
+var sysDate = new Date();
+var date = sysDate.toLocaleDateString();
+var dateTime = date + sysDate.toLocaleTimeString();
+console.log(date);
+console.log(dateTime);
+/**
+ * Make API call to Waitz Live page.
+ * If there is an error, make this known.
+ */
+function WaitzLiveAPICall() {
     return __awaiter(this, void 0, void 0, function () {
-        var response, html;
+        var rows, response, json, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, axios_1.default.get("https://waitz.io/live/vanderbilt-university")
-                    // get the HTML from the server response
-                    // and log it
-                ];
+                case 0:
+                    rows = [];
+                    _a.label = 1;
                 case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, axios_1.default.get("https://waitz.io/live/vanderbilt-university")];
+                case 2:
                     response = _a.sent();
-                    html = response.data;
-                    console.log(html);
-                    return [2 /*return*/];
+                    json = response.data.data;
+                    json.forEach(function (data) {
+                        var row = {
+                            Name: data.name,
+                            isAvailable: data.isAvailable,
+                            isOpen: data.isOpen,
+                            numPeople: data.people,
+                            capacity: data.capacity,
+                            percCapacity: data.percentage
+                        };
+                        rows.push(row);
+                    });
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_1 = _a.sent();
+                    console.error("Error fetching data:", error_1);
+                    return [3 /*break*/, 4];
+                case 4:
+                    console.log(rows);
+                    return [2 /*return*/, rows];
             }
         });
     });
 }
-scrapeWaitz();
+/**
+ * Make API call to Waitz Trends page.
+ * If there is an error, make this known.
+ */
+function WaitzTrendsAPICall() {
+    return __awaiter(this, void 0, void 0, function () {
+        var response, json, error_2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    _a.trys.push([0, 2, , 3]);
+                    return [4 /*yield*/, axios_1.default.get("https://waitz.io/compare/vanderbilt-university")
+                        // get HTML from the server response
+                    ];
+                case 1:
+                    response = _a.sent();
+                    json = response.data;
+                    console.log(json);
+                    return [3 /*break*/, 3];
+                case 2:
+                    error_2 = _a.sent();
+                    console.error("Error fetching data:", error_2);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+/**
+ * Pull information from sublocations.
+ * If there is an error, make this known.
+ */
+/**
+ * Pull from json to export to Google Sheet.
+ * If there is an error, make this known.
+ */
+/*function shapeWaitzDataType(data: any): WaitzData[] {
+    const rows: WaitzData[] = []
+    const row: WaitzData = {
+        Name: data.name,
+        isAvailable: data.isAvailable,
+        isOpen: data.isOpen,
+        numPeople: data.people,
+        capacity: data.capacity
+    };
+    rows.push(row)
+    return rows;
+}
+    */
+WaitzLiveAPICall();
+//WaitzTrendsAPICall()
