@@ -48,6 +48,9 @@ web_modules/
 # TypeScript cache
 *.tsbuildinfo
 
+# TypeScript js output
+*.js
+
 # Optional npm cache directory
 .npm
 
