@@ -23,8 +23,7 @@ Updated: 9/17/2024 <br>
 ```
  
 ## Deployment History
-list major deployments here
-- [date]: [info here]
+- 9/17: Update README
 
 ## Credits
 - Back-end Development | Katherine Oung
