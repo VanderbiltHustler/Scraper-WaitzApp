@@ -9,37 +9,74 @@ import * as WaitzTypes from "./types"
 // Object to Store the data
 const sysDate: Date = new Date();
 const date: string = sysDate.toLocaleDateString();
-const dateTime: string = date + sysDate.toLocaleTimeString();
+const dateTime: string = sysDate.toLocaleTimeString();
 
-console.log(date)  
-console.log(dateTime)  
+//console.log(date)  
+//console.log(dateTime)  
 
 /**
  * Make API call to Waitz Live page.
  * If there is an error, make this known.
+ * @return object
  */
-async function WaitzLiveAPICall(): Promise<WaitzTypes.Live[] | null> {
-    const rows: WaitzTypes.Live[] = [];
+async function WaitzLiveAPICall(): Promise<Object[] | null> {
+    let json: Object[] | null = null;
     try {
         // perform an HTTP GET request to target page
         const response = await axios.get("https://waitz.io/live/vanderbilt-university");
         // get HTML from the server response
-        const json = response.data.data;
-
+        json = response.data.data;
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+        return json;
+}
+/**
+ * Shapes json into a row and checks sublocations
+ * If there is an error, make this known.
+ * @return WaitzTypes.Live[]
+ */
+async function WaitzLiveArray(): Promise<WaitzTypes.Live[]> {
+    const results = await WaitzLiveAPICall();
+    const rows: WaitzTypes.Live[] = [];
         //shape into array
-        json.forEach((data: any) => {
+        if (results) {
+        results.forEach((data: any) => { //data = one row
             const row: WaitzTypes.Live = {
-                Name: data.name,
+                isSublocation: false, //is the location a sublocation?
+                Sublocation: null, //name of sublocation
+                Name: data.name, //main location name
                 isAvailable: data.isAvailable,
                 isOpen: data.isOpen,
                 numPeople: data.people,
                 capacity: data.capacity, 
-                percCapacity: data.percentage           
+                percCapacity: data.percentage,  
+                //timestamp of API call
+                date: date,
+                dateTime: dateTime     
             };
-            rows.push(row)
+            //check sublocations
+            rows.push(row);
+            if (data.subLocs != false) {
+            data.subLocs.forEach((subLoc: any) => {
+                const subLocRow: WaitzTypes.Live = {
+                isSublocation: true, //is the location a sublocation?
+                Sublocation: subLoc.name, //name of sublocation
+                Name: data.name, //main location name
+                isAvailable: subLoc.isAvailable,
+                isOpen: subLoc.isOpen,
+                numPeople: subLoc.people,
+                capacity: subLoc.capacity, 
+                percCapacity: subLoc.percentage,  
+                //timestamp of API call
+                date: date,
+                dateTime: dateTime     
+            }
+            rows.push(subLocRow);
         });
-    } catch (error) {
-        console.error("Error fetching data:", error);
+    }
+    });
+    rows.sort((a, b) => a.Name.localeCompare(b.Name));
     }
     console.log(rows);
     return rows;
@@ -63,31 +100,10 @@ async function WaitzTrendsAPICall() {
     }
   }
 
-/**
- * Pull information from sublocations.
- * If there is an error, make this known.
- */
-
-
   
 /**
  * Pull from json to export to Google Sheet.
  * If there is an error, make this known.
  */
-/*function shapeWaitzDataType(data: any): WaitzData[] {
-    const rows: WaitzData[] = []
-    const row: WaitzData = {
-        Name: data.name,
-        isAvailable: data.isAvailable,
-        isOpen: data.isOpen,
-        numPeople: data.people,
-        capacity: data.capacity
-    };
-    rows.push(row)
-    return rows;
-}
-    */
 
-
-  WaitzLiveAPICall()
-  //WaitzTrendsAPICall()
+  WaitzLiveArray()

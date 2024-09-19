@@ -40,44 +40,92 @@ var axios_1 = require("axios");
 // Object to Store the data
 var sysDate = new Date();
 var date = sysDate.toLocaleDateString();
-var dateTime = date + sysDate.toLocaleTimeString();
-console.log(date);
-console.log(dateTime);
+var dateTime = sysDate.toLocaleTimeString();
+//console.log(date)  
+//console.log(dateTime)  
 /**
  * Make API call to Waitz Live page.
  * If there is an error, make this known.
+ * @return object
  */
 function WaitzLiveAPICall() {
     return __awaiter(this, void 0, void 0, function () {
-        var rows, response, json, error_1;
+        var json, response, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    rows = [];
+                    json = null;
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, axios_1.default.get("https://waitz.io/live/vanderbilt-university")];
                 case 2:
                     response = _a.sent();
+                    // get HTML from the server response
                     json = response.data.data;
-                    json.forEach(function (data) {
-                        var row = {
-                            Name: data.name,
-                            isAvailable: data.isAvailable,
-                            isOpen: data.isOpen,
-                            numPeople: data.people,
-                            capacity: data.capacity,
-                            percCapacity: data.percentage
-                        };
-                        rows.push(row);
-                    });
                     return [3 /*break*/, 4];
                 case 3:
                     error_1 = _a.sent();
                     console.error("Error fetching data:", error_1);
                     return [3 /*break*/, 4];
-                case 4:
+                case 4: return [2 /*return*/, json];
+            }
+        });
+    });
+}
+/**
+ * Shapes json into a row
+ * If there is an error, make this known.
+ * @return WaitzTypes.Live[]
+ */
+function WaitzLiveArray() {
+    return __awaiter(this, void 0, void 0, function () {
+        var results, rows;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, WaitzLiveAPICall()];
+                case 1:
+                    results = _a.sent();
+                    rows = [];
+                    //shape into array
+                    if (results) {
+                        results.forEach(function (data) {
+                            var row = {
+                                isSublocation: false, //is the location a sublocation?
+                                Sublocation: null, //name of sublocation
+                                Name: data.name, //main location name
+                                isAvailable: data.isAvailable,
+                                isOpen: data.isOpen,
+                                numPeople: data.people,
+                                capacity: data.capacity,
+                                percCapacity: data.percentage,
+                                //timestamp of API call
+                                date: date,
+                                dateTime: dateTime
+                            };
+                            //check sublocations
+                            rows.push(row);
+                            if (data.subLocs != false) {
+                                data.subLocs.forEach(function (subLoc) {
+                                    var subLocRow = {
+                                        isSublocation: true, //is the location a sublocation?
+                                        Sublocation: subLoc.name, //name of sublocation
+                                        Name: data.name, //main location name
+                                        isAvailable: subLoc.isAvailable,
+                                        isOpen: subLoc.isOpen,
+                                        numPeople: subLoc.people,
+                                        capacity: subLoc.capacity,
+                                        percCapacity: subLoc.percentage,
+                                        //timestamp of API call
+                                        date: date,
+                                        dateTime: dateTime
+                                    };
+                                    rows.push(subLocRow);
+                                });
+                            }
+                        });
+                        rows.sort(function (a, b) { return a.Name.localeCompare(b.Name); });
+                    }
                     console.log(rows);
                     return [2 /*return*/, rows];
             }
@@ -100,7 +148,7 @@ function WaitzTrendsAPICall() {
                     ];
                 case 1:
                     response = _a.sent();
-                    json = response.data;
+                    json = response.data.data;
                     console.log(json);
                     return [3 /*break*/, 3];
                 case 2:
@@ -112,10 +160,6 @@ function WaitzTrendsAPICall() {
         });
     });
 }
-/**
- * Pull information from sublocations.
- * If there is an error, make this known.
- */
 /**
  * Pull from json to export to Google Sheet.
  * If there is an error, make this known.
@@ -133,5 +177,4 @@ function WaitzTrendsAPICall() {
     return rows;
 }
     */
-WaitzLiveAPICall();
-//WaitzTrendsAPICall()
+WaitzLiveArray();

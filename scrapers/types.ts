@@ -15,6 +15,11 @@ export interface Live {
     numPeople: number; //number of people currently there
     capacity: number; //capacity of location
     percCapacity: number; //%busy
+    isSublocation: boolean; //is the location a sublocation?
+    Sublocation: string | null; //name of sublocation
+    //timestamp of API call
+    date: string;
+    dateTime: string;
   }
 
 /**
