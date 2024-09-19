@@ -2,9 +2,7 @@
 Status: In-Progress <br>
 Published: [TBD] <br>
 Updated: 9/17/2024 <br>
-### [short description here]
-
-## How this tool works
+### This scraper logs information about occupancy by time across various dining halls and study spaces at Vanderbilt University at a 15 minute interval when the buildings are open. 
 
 ## Directory 
 ```bash
@@ -23,10 +21,18 @@ Updated: 9/17/2024 <br>
 ```
  
 ## Deployment History
+- 9/19: The script correctly logs occupancy information when run locally. 
 - 9/17: Update README
+- 9/12: Load in scraper directory
+
+## Future releases
+- Log scraped information to a Google Sheet accessible by Hustler staffers
+- Set time interval for the scraper to run and notify #data if the data fails to be fetched.
+- Scrape comparison/trend data as well.
 
 ## Credits
-- Back-end Development | Katherine Oung
+- Design and Development | Katherine Oung
+- [Typescript Scraper Documenation](https://docs.google.com/document/d/1j6-yFNOu9TEExcvicXXnnBYLl9vRy3UNEQ7kvFER2bY/)
 
 ## Powered by The Vanderbilt Hustler Data Team
 For questions, comments or curiosities: 
