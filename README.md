@@ -1,8 +1,8 @@
 # Waitz App Scraper
 Status: In-Progress <br>
 Published: [TBD] <br>
-Updated: 9/17/2024 <br>
-### This scraper logs information about occupancy by time across various dining halls and study spaces at Vanderbilt University at a 15 minute interval when the buildings are open. 
+Updated: 9/19/2024 <br>
+### This scraper logs information about occupancy by time across various dining halls and study spaces at Vanderbilt University. 
 
 ## Directory 
 ```bash
@@ -37,5 +37,5 @@ Updated: 9/17/2024 <br>
 ## Powered by The Vanderbilt Hustler Data Team
 For questions, comments or curiosities: 
 - Hustler staff: Slack the #data team. 
-- The rest of the 🌎: [email](mailto:url) Data Editor [Data Editor Name]
+- The rest of the 🌎: [email](mailto:katherine.oung@vanderbilt.edu) Data Editor Katherine Oung
 
