@@ -24,6 +24,7 @@ Updated: 9/19/2024 <br>
 - 9/19: The script correctly logs occupancy information when run locally. 
 - 9/17: Update README
 - 9/12: Load in scraper directory
+- 8/27: Project specs and documentation
 
 ## Future releases
 - Log scraped information to a Google Sheet accessible by Hustler staffers
